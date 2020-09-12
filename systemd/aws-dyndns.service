@@ -3,7 +3,8 @@ Description=AWS Route53 Dynamic DNS
 After=network.target
 
 [Service]
-ExecStart=/usr/local/sbin/aws-dyndns $UPDATE_DNS_FQDN $UPDATE_DNS_TTL $UPDATE_AWS_ZONE_ID $UPDATE_RECHECK_SECS
+#Usage  : /usr/local/sbin/aws-dyndns DNS_FQDN DNS_TTL AWS_ZONE_ID RECHECK_SECS AWS_PROFILE
+ExecStart=/usr/local/sbin/aws-dyndns $UPDATE_DNS_FQDN $UPDATE_DNS_TTL $UPDATE_AWS_ZONE_ID $UPDATE_RECHECK_SECS $AWS_PROFILE
 Type=simple
 User=nobody
 Group=nogroup
