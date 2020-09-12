@@ -1,6 +1,8 @@
 # aws-dyndns
 A minimalistic approach to Dynamic DNS using AWS Route 53.
 
+Additions 2020 by bbeeson.
+
 # Motivation
 
 This whole solution was done in just a few hours, because it offloads most of the work to other SaaS/PaaS:
@@ -59,14 +61,7 @@ aws configure
 ```
 - Run the script manually; here is an example:
 ```bash
-./aws-dyndns test.example.com 5 Z148QEXAMPLE8V 30
-```
-
-You should ensure that this script runs all the time. The easiest way would be to add the following to your ```/etc/rc.local``` file, which will start the script in background on system boot:
-```bash
-/usr/bin/sudo -u $YOUR_USER \
-        /home/$YOUR_USER/$PATH_TO_SCRIPT/aws-dyndns \
-        test.example.com 5 Z148QEXAMPLE8V 30 2>&1 | logger -t awsdyndns --id=$$ &
+./aws-dyndns test.example.com 5 Z148QEXAMPLE8V 30 myawsprofile
 ```
 
 # Installing aws-dyndns as a systemd service
@@ -78,7 +73,6 @@ execute with the least possible permissions, and relaunch on crash.
 cd aws-dyndns
 
 # This will launch the default editor, so you can set a configuration.
-# Because this will run as the unprivileged nobody/nogroup user/group we need to pass the AWS credentials.
 editor systemd/aws-dyndns.conf
 
 # The configuration file needs to be readable by root, but we can give it very restrictive permissions to protect our AWS key.
@@ -86,9 +80,9 @@ sudo chown root:root aws-dyndns systemd/aws-dyndns.service systemd/aws-dyndns.co
 sudo chmod 600 systemd/aws-dyndns.conf
 
 # Install the executable, configuration, and service
-sudo mv aws-dyndns /usr/local/sbin
-sudo mv systemd/aws-dyndns.conf /etc/
-sudo mv systemd/aws-dyndns.service /etc/systemd/system
+sudo cp aws-dyndns /usr/local/sbin
+sudo cp systemd/aws-dyndns.conf /etc/
+sudo cp systemd/aws-dyndns.service /etc/systemd/system
 
 # Reload systemd and then start the service.
 sudo systemctl daemon-reload

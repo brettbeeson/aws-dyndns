@@ -3,8 +3,8 @@ set -u
 
 function usage() {
 	cat >&2 << EOF
-Usage  : $0 DNS_FQDN DNS_TTL AWS_ZONE_ID RECHECK_SECS
-Example: $0 test.example.com 5 Z148QEXAMPLE8V 30
+Usage  : $0 DNS_FQDN DNS_TTL AWS_ZONE_ID RECHECK_SECS AWS_PROFILE
+Example: $0 test.example.com 5 Z148QEXAMPLE8V 30 ddns
 EOF
 	exit 1
 }
@@ -13,12 +13,13 @@ function validate_ip() {
 	[[ $1 =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]
 }
 
-[ "$#" -eq 4 ] || usage
+[ "$#" -eq 5 ] || usage
 
 DNS_FQDN="$1"; shift
 DNS_TTL="$1"; shift
 AWS_ZONE_ID="$1"; shift
 REFRESH_TIME="$1"; shift
+PROFILE="$1"; shift
 
 OLD_IP=""
 TS=0
@@ -69,9 +70,9 @@ while [ 1 ] ; do
 EOF
 
 	echo "Updating IP to: $NEW_IP ($DNS_FQDN); OLD=$OLD_IP"
-
 	aws route53 change-resource-record-sets \
-		--hosted-zone-id "$AWS_ZONE_ID" --change-batch "$JSON_CMD"
+		--hosted-zone-id "$AWS_ZONE_ID" --change-batch "$JSON_CMD" \
+		--profile "$PROFILE"
 
 	# XXX: No "get-change" is performed.
 	# We update at most every 30 seconds.
