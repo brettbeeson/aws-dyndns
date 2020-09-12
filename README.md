@@ -1,7 +1,7 @@
 # aws-dyndns
 A minimalistic approach to Dynamic DNS using AWS Route 53.
 
-Additions 2020 by bbeeson.
+Additions 2020 by bbeeson: mainly using aws profile instead of key
 
 # Motivation
 
