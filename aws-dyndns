@@ -4,7 +4,7 @@ set -u
 function usage() {
 	cat >&2 << EOF
 Usage  : $0 DNS_FQDN DNS_TTL AWS_ZONE_ID RECHECK_SECS AWS_PROFILE
-Example: $0 test.example.com 5 Z148QEXAMPLE8V 30 ddns
+Example: $0 test.example.com 5 ZZZZZZZZZZZZ 30 ddns
 EOF
 	exit 1
 }
